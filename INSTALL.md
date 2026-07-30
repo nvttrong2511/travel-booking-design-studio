@@ -1,255 +1,231 @@
 # Cài Travel Booking Design Studio vào Claude Code
 
-Tài liệu này hướng dẫn cách dùng repository như một bộ creative agents cho một dự án travel frontend thực tế.
+Bộ cài hiện hoạt động như một npm CLI và đưa trực tiếp agents, commands, rules cùng tài liệu hỗ trợ vào `.claude/` của dự án.
 
-## 1. Cài Claude Code
+## 1. Yêu cầu
 
-Yêu cầu tối thiểu:
-
-- macOS, Linux, Windows qua WSL hoặc Git Bash
 - Node.js 18+
-- tài khoản Claude hoặc Anthropic Console
+- Claude Code
+- macOS, Linux, Windows qua WSL hoặc Git Bash
 
-Cài CLI:
+Cài Claude Code:
 
 ```bash
 npm install -g @anthropic-ai/claude-code
-```
-
-Kiểm tra cài đặt:
-
-```bash
-claude --version
 claude doctor
 ```
 
-Không chạy npm global bằng `sudo`.
+Không dùng `sudo npm install -g`.
 
-## 2. Chọn cách sử dụng
+## 2. Cài bằng npx
 
-Có hai cách.
+Đi đến root dự án frontend:
 
-### Cách A — Dùng studio như một dự án độc lập
+```bash
+cd ~/projects/my-travel-app
+```
 
-Phù hợp khi bạn muốn nghiên cứu concept, tạo design language, review giao diện hoặc phát triển trực tiếp trong repository này.
+Hiện tại package chưa được publish lên npm, vì vậy chạy trực tiếp từ GitHub:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init
+```
+
+Sau khi publish npm, có thể dùng:
+
+```bash
+npx travel-booking-design-studio init
+```
+
+Bộ cài mặc định dùng profile `complete`.
+
+## 3. Kết quả sau khi cài
+
+```text
+my-travel-app/
+├── CLAUDE.md
+└── .claude/
+    ├── agents/
+    ├── commands/
+    ├── rules/
+    ├── travel-booking-design-studio.md
+    └── travel-booking-design-studio/
+        ├── templates/
+        ├── checklists/
+        ├── docs/
+        ├── examples/
+        └── installation.json
+```
+
+`CLAUDE.md` hiện tại không bị thay thế. CLI chỉ thêm block quản lý sau nếu chưa tồn tại:
+
+```md
+<!-- travel-booking-design-studio -->
+@.claude/travel-booking-design-studio.md
+```
+
+## 4. Các profile
+
+### Complete
+
+Toàn bộ agents, commands, rules, templates, checklist, docs và examples:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init --profile complete
+```
+
+### Minimal
+
+Commands và rules, không cài agents hoặc tài liệu mở rộng:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init --profile minimal
+```
+
+### Agents only
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init --profile agents
+```
+
+### Commands only
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init --profile commands
+```
+
+## 5. Cài vào thư mục khác
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init \
+  --target /absolute/path/to/project
+```
+
+Dùng trong CI hoặc script không cần hỏi xác nhận:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio init --yes
+```
+
+## 6. Cơ chế chống ghi đè
+
+Khi destination đã có file khác nội dung, CLI mặc định:
+
+- không ghi đè;
+- báo conflict;
+- giữ nguyên file của dự án.
+
+Xem trước thay đổi:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio update --dry-run
+```
+
+Chỉ dùng `--force` khi bạn thật sự muốn thay file bị trùng:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio update --force
+```
+
+Nên commit dự án trước khi dùng `--force`.
+
+## 7. Kiểm tra trạng thái
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio status
+```
+
+Hoặc kiểm tra thủ công:
+
+```bash
+find .claude -maxdepth 3 -type f | sort
+```
+
+Khởi động Claude Code:
+
+```bash
+claude
+```
+
+Trong Claude Code, nhập `/` và xác nhận các command:
+
+```text
+/create-concept
+/challenge-design
+/generate-design-language
+/reinvent-layout
+/implement-concept
+/design-review
+```
+
+## 8. Workflow khuyến nghị
+
+```text
+/create-concept
+/challenge-design
+/generate-design-language
+/reinvent-layout
+/implement-concept
+/design-review
+```
+
+Prompt bắt đầu mẫu:
+
+```text
+Đọc CLAUDE.md và toàn bộ design studio đã cài trong .claude/.
+
+Nhiệm vụ: thiết kế lại trang tìm kiếm khách sạn.
+Trước khi code, hãy tạo ít nhất 3 concept khác nhau về cấu trúc,
+interaction model và visual language. Dùng Design Critic loại các hướng
+generic. Không sao chép Airbnb, Booking, Agoda, Traveloka hoặc Expedia.
+```
+
+## 9. Cập nhật
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio update
+```
+
+CLI chỉ thêm file mới hoặc cập nhật file trùng khi nội dung giống bản studio cũ. File xung đột được giữ nguyên trừ khi có `--force`.
+
+## 10. Gỡ cài đặt
+
+Xem trước:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio remove --dry-run
+```
+
+Gỡ:
+
+```bash
+npx github:nvttrong2511/travel-booking-design-studio remove
+```
+
+CLI dựa trên `.claude/travel-booking-design-studio/installation.json` và chỉ xóa các file đã được ghi nhận là do studio quản lý. File `.claude/` không liên quan được giữ nguyên.
+
+## 11. Dành cho maintainer
 
 ```bash
 git clone https://github.com/nvttrong2511/travel-booking-design-studio.git
 cd travel-booking-design-studio
-claude
+npm test
+npm run check
+npm pack
 ```
 
-Claude Code tự đọc `CLAUDE.md` ở thư mục gốc. Các workflow nằm trong `.claude/commands/`, còn specialist agents nằm trong `.claude/agents/`.
-
-Trong Claude Code, nhập `/` để kiểm tra command đã được nhận diện, sau đó bắt đầu bằng:
-
-```text
-/create-concept
-```
-
-### Cách B — Cài studio vào dự án frontend hiện có
-
-Đây là cách khuyến nghị.
-
-Giả sử dự án cần thiết kế nằm tại:
-
-```text
-~/projects/my-travel-app
-```
-
-Clone studio tạm thời:
+Test gói tarball trong một dự án tạm:
 
 ```bash
-git clone https://github.com/nvttrong2511/travel-booking-design-studio.git /tmp/travel-booking-design-studio
-cd ~/projects/my-travel-app
+npx ./travel-booking-design-studio-1.0.0.tgz init \
+  --target /path/to/test-project
 ```
 
-Sao chép hệ thống vào dự án:
+Publish npm:
 
 ```bash
-mkdir -p .claude
-cp -R /tmp/travel-booking-design-studio/.claude/agents .claude/
-cp -R /tmp/travel-booking-design-studio/.claude/commands .claude/
-cp -R /tmp/travel-booking-design-studio/.claude/rules .claude/
-cp -R /tmp/travel-booking-design-studio/docs ./design-studio-docs
-cp -R /tmp/travel-booking-design-studio/templates ./design-studio-templates
-cp -R /tmp/travel-booking-design-studio/checklists ./design-studio-checklists
-cp /tmp/travel-booking-design-studio/CLAUDE.md ./CLAUDE.design-studio.md
+npm login
+npm publish
 ```
 
-Sau đó thêm dòng sau vào `CLAUDE.md` của dự án:
-
-```md
-@CLAUDE.design-studio.md
-```
-
-Nếu dự án chưa có `CLAUDE.md`, tạo file mới:
-
-```bash
-printf '@CLAUDE.design-studio.md\n' > CLAUDE.md
-```
-
-Khởi động Claude Code ngay tại root dự án:
-
-```bash
-claude
-```
-
-## 3. Cài nhanh bằng script
-
-Từ root của dự án frontend:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nvttrong2511/travel-booking-design-studio/main/scripts/install.sh | bash
-```
-
-Script sẽ:
-
-- tải phiên bản mới nhất của studio;
-- sao chép agents, commands và rules vào `.claude/`;
-- sao chép tài liệu hỗ trợ vào các thư mục `design-studio-*`;
-- tạo `CLAUDE.design-studio.md`;
-- thêm import vào `CLAUDE.md` nếu chưa có;
-- không ghi đè `CLAUDE.md` hiện tại của dự án.
-
-Nên review script trước khi chạy trong môi trường quan trọng.
-
-## 4. Kiểm tra sau khi cài
-
-Từ root dự án:
-
-```bash
-find .claude -maxdepth 2 -type f | sort
-```
-
-Bạn phải thấy các thư mục:
-
-```text
-.claude/agents/
-.claude/commands/
-.claude/rules/
-```
-
-Mở Claude Code:
-
-```bash
-claude
-```
-
-Sau đó kiểm tra:
-
-```text
-Hãy đọc CLAUDE.md và tóm tắt creative workflow của dự án này.
-```
-
-Nhập `/` và xác nhận các command sau xuất hiện:
-
-```text
-/create-concept
-/challenge-design
-/generate-design-language
-/reinvent-layout
-/implement-concept
-/design-review
-```
-
-## 5. Workflow sử dụng chuẩn
-
-Không yêu cầu Claude code giao diện ngay ở prompt đầu tiên.
-
-### Bước 1 — Tạo brief
-
-```text
-Đọc codebase và tạo design brief cho trang khám phá tour cao cấp dành cho người dùng Việt Nam. Chưa code.
-```
-
-### Bước 2 — Tạo concept
-
-```text
-/create-concept
-```
-
-Yêu cầu cụ thể hơn:
-
-```text
-/create-concept Trang khám phá khách sạn tại Nhật Bản. Tạo 3 hướng khác nhau về cấu trúc, interaction và visual language. Không dùng hero + search pill + card grid.
-```
-
-### Bước 3 — Phản biện
-
-```text
-/challenge-design
-```
-
-### Bước 4 — Khóa design language
-
-```text
-/generate-design-language
-```
-
-### Bước 5 — Tái cấu trúc layout nếu còn generic
-
-```text
-/reinvent-layout
-```
-
-### Bước 6 — Triển khai
-
-```text
-/implement-concept
-```
-
-### Bước 7 — Review trước khi hoàn thành
-
-```text
-/design-review
-```
-
-## 6. Prompt khởi đầu khuyến nghị
-
-```text
-Đọc toàn bộ CLAUDE.md, .claude/rules và các file liên quan trong design-studio-docs.
-
-Nhiệm vụ: thiết kế lại trang tìm kiếm khách sạn.
-
-Trước khi code:
-1. phân tích codebase hiện tại;
-2. xác định user state và business goal;
-3. tạo ít nhất 3 concept khác nhau thực sự;
-4. dùng Design Critic loại hướng generic;
-5. đề xuất một hướng thắng và nêu trade-off;
-6. chờ tôi phê duyệt concept rồi mới triển khai.
-
-Không sao chép Airbnb, Booking, Agoda, Traveloka hoặc Expedia.
-```
-
-## 7. Cập nhật studio trong dự án
-
-Chạy lại installer:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nvttrong2511/travel-booking-design-studio/main/scripts/install.sh | bash
-```
-
-Installer cập nhật các file studio nhưng giữ nguyên `CLAUDE.md` dự án. Với file đã tùy biến bên trong `.claude/`, hãy commit trước khi cập nhật để dễ review diff.
-
-## 8. Gỡ cài đặt
-
-```bash
-rm -rf .claude/agents .claude/commands .claude/rules
-rm -rf design-studio-docs design-studio-templates design-studio-checklists
-rm -f CLAUDE.design-studio.md
-```
-
-Sau đó xóa dòng sau khỏi `CLAUDE.md`:
-
-```md
-@CLAUDE.design-studio.md
-```
-
-## 9. Lưu ý quan trọng
-
-- Repository này không phải package npm và không cần `npm install` bên trong dự án frontend.
-- Claude Code chỉ áp dụng project instructions khi bạn chạy `claude` từ root hoặc một thư mục con thuộc project đó.
-- `CLAUDE.md` nên giữ các chỉ dẫn riêng của dự án; studio được import qua `CLAUDE.design-studio.md` để tránh ghi đè kiến trúc và coding conventions hiện có.
-- Agents tạo ý tưởng nhưng vẫn phải tuân thủ API contract, accessibility, performance và dữ liệu thực của sản phẩm.
+Trước khi publish cần kiểm tra lại tên package `travel-booking-design-studio` còn khả dụng trên npm.
