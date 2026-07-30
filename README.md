@@ -16,19 +16,65 @@ Every substantial design task must:
 4. preserve usability, accessibility, trust, responsive behavior, and implementation feasibility;
 5. finish with a critical design review.
 
-## Start here
+## Install into Claude Code
 
-Read `CLAUDE.md`, then use one of the commands in `.claude/commands/`.
+### 1. Install Claude Code
 
-Recommended workflow:
+```bash
+npm install -g @anthropic-ai/claude-code
+claude doctor
+```
+
+### 2. Install this studio into an existing frontend project
+
+Run from the root of your travel project:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nvttrong2511/travel-booking-design-studio/main/scripts/install.sh | bash
+```
+
+Then start Claude Code:
+
+```bash
+claude
+```
+
+Inside Claude Code, type `/` to verify the studio commands, then run:
+
+```text
+/create-concept
+```
+
+The installer preserves the project's existing `CLAUDE.md`. It installs the studio as `CLAUDE.design-studio.md` and adds this import:
+
+```md
+@CLAUDE.design-studio.md
+```
+
+For manual installation, Windows notes, verification, updates, uninstall instructions, and a complete recommended workflow, read [`INSTALL.md`](INSTALL.md).
+
+## Use this repository directly
+
+```bash
+git clone https://github.com/nvttrong2511/travel-booking-design-studio.git
+cd travel-booking-design-studio
+claude
+```
+
+Claude Code automatically reads the root `CLAUDE.md`. Specialist agents live in `.claude/agents/`, and reusable workflows live in `.claude/commands/`.
+
+## Recommended workflow
 
 ```text
 /create-concept
 /challenge-design
 /generate-design-language
 /reinvent-layout
+/implement-concept
 /design-review
 ```
+
+Do not begin by asking Claude to code the page immediately. Start with a brief and concepts, critique them, lock the design language, then implement the selected direction.
 
 ## Repository map
 
@@ -37,6 +83,8 @@ Recommended workflow:
   agents/       Specialist creative agents
   commands/     Reusable design workflows
   rules/        Non-negotiable studio rules
+
+scripts/        Project installer
 
 docs/
   principles/   Creative and UX principles
