@@ -2,21 +2,11 @@
 
 An AI-first creative design operating system for building bold, original, production-ready travel booking interfaces with Claude Code.
 
-This repository is not a generic documentation archive and not a clone factory. It is a structured AI design studio that forces divergent thinking, strong art direction, critical review, and implementation discipline.
-
-## Core promise
-
 > Invent interfaces. Do not imitate marketplaces.
 
-Every substantial design task must:
+This repository is both a design knowledge base and an installable CLI. The CLI places agents, commands, rules, templates, and studio instructions into an existing project's `.claude/` directory without replacing user-owned files by default.
 
-1. generate at least three structurally different concepts;
-2. define a visual and interaction language before assembling components;
-3. reject generic travel marketplace and SaaS patterns;
-4. preserve usability, accessibility, trust, responsive behavior, and implementation feasibility;
-5. finish with a critical design review.
-
-## Install into Claude Code
+## Quick start
 
 ### 1. Install Claude Code
 
@@ -25,45 +15,113 @@ npm install -g @anthropic-ai/claude-code
 claude doctor
 ```
 
-### 2. Install this studio into an existing frontend project
+### 2. Run the studio installer inside your project
 
-Run from the root of your travel project:
+Until the package is published to npm, run it directly from GitHub:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nvttrong2511/travel-booking-design-studio/main/scripts/install.sh | bash
+cd your-travel-project
+npx github:nvttrong2511/travel-booking-design-studio init
 ```
 
-Then start Claude Code:
+After npm publication, the shorter command will be:
+
+```bash
+npx travel-booking-design-studio init
+```
+
+The default `complete` profile installs:
+
+```text
+.claude/
+├── agents/
+├── commands/
+├── rules/
+├── travel-booking-design-studio.md
+└── travel-booking-design-studio/
+    ├── templates/
+    ├── checklists/
+    ├── docs/
+    ├── examples/
+    └── installation.json
+```
+
+It also creates or updates the root `CLAUDE.md` with:
+
+```md
+<!-- travel-booking-design-studio -->
+@.claude/travel-booking-design-studio.md
+```
+
+Existing project instructions are preserved.
+
+### 3. Start Claude Code
 
 ```bash
 claude
 ```
 
-Inside Claude Code, type `/` to verify the studio commands, then run:
+Then run:
 
 ```text
 /create-concept
 ```
 
-The installer preserves the project's existing `CLAUDE.md`. It installs the studio as `CLAUDE.design-studio.md` and adds this import:
-
-```md
-@CLAUDE.design-studio.md
-```
-
-For manual installation, Windows notes, verification, updates, uninstall instructions, and a complete recommended workflow, read [`INSTALL.md`](INSTALL.md).
-
-## Use this repository directly
+## CLI commands
 
 ```bash
-git clone https://github.com/nvttrong2511/travel-booking-design-studio.git
-cd travel-booking-design-studio
-claude
+# Full studio
+npx github:nvttrong2511/travel-booking-design-studio init
+
+# Smaller installation
+npx github:nvttrong2511/travel-booking-design-studio init --profile minimal
+
+# Only specialist agents
+npx github:nvttrong2511/travel-booking-design-studio init --profile agents
+
+# Only slash commands
+npx github:nvttrong2511/travel-booking-design-studio init --profile commands
+
+# Inspect installation
+npx github:nvttrong2511/travel-booking-design-studio status
+
+# Preview an update
+npx github:nvttrong2511/travel-booking-design-studio update --dry-run
+
+# Update without replacing conflicts
+npx github:nvttrong2511/travel-booking-design-studio update
+
+# Replace conflicting studio paths intentionally
+npx github:nvttrong2511/travel-booking-design-studio update --force
+
+# Remove managed files
+npx github:nvttrong2511/travel-booking-design-studio remove
 ```
 
-Claude Code automatically reads the root `CLAUDE.md`. Specialist agents live in `.claude/agents/`, and reusable workflows live in `.claude/commands/`.
+Supported options:
 
-## Recommended workflow
+```text
+--profile <complete|minimal|agents|commands>
+--target <directory>
+--force
+--yes, -y
+--dry-run
+--version, -v
+```
+
+## Safety behavior
+
+The CLI:
+
+- installs Claude Code assets under `.claude/`;
+- preserves an existing root `CLAUDE.md` and appends one managed import;
+- skips conflicting files by default;
+- records managed paths in `installation.json`;
+- removes only recorded studio files during `remove`;
+- supports `--dry-run` before update or removal;
+- uses only Node.js built-ins and requires Node.js 18 or newer.
+
+## Recommended design workflow
 
 ```text
 /create-concept
@@ -74,7 +132,17 @@ Claude Code automatically reads the root `CLAUDE.md`. Specialist agents live in 
 /design-review
 ```
 
-Do not begin by asking Claude to code the page immediately. Start with a brief and concepts, critique them, lock the design language, then implement the selected direction.
+Do not begin by asking Claude to code the page immediately. Start with a brief and multiple structurally different concepts, critique them, lock the design language, and only then implement the selected direction.
+
+## Core creative rules
+
+Every substantial design task must:
+
+1. generate at least three structurally different concepts;
+2. define a visual and interaction language before assembling components;
+3. reject generic travel marketplace and SaaS patterns;
+4. preserve usability, accessibility, trust, responsive behavior, and implementation feasibility;
+5. finish with a critical design review.
 
 ## Repository map
 
@@ -84,18 +152,42 @@ Do not begin by asking Claude to code the page immediately. Start with a brief a
   commands/     Reusable design workflows
   rules/        Non-negotiable studio rules
 
-scripts/        Project installer
+bin/             npm/npx CLI
+test/            CLI behavior tests
+scripts/         Legacy shell installer
 
-docs/
-  principles/   Creative and UX principles
-  playbooks/    End-to-end design methods
-  patterns/     Layout, interaction, motion, and storytelling patterns
-  references/   Inspiration translation frameworks
-
-templates/      Structured briefs and output templates
-checklists/     Quality gates before implementation and delivery
-examples/       Worked examples showing the expected level of thinking
+docs/            Principles, playbooks, patterns, references
+templates/       Structured briefs and output templates
+checklists/      Quality gates
+examples/        Worked creative examples
 ```
+
+## Development
+
+```bash
+git clone https://github.com/nvttrong2511/travel-booking-design-studio.git
+cd travel-booking-design-studio
+npm test
+npm run check
+node bin/travel-booking-design-studio.js init --target /path/to/test-project --dry-run
+```
+
+To test the package exactly as users receive it:
+
+```bash
+npm pack
+npx ./travel-booking-design-studio-1.0.0.tgz init --target /path/to/test-project
+```
+
+## Publishing to npm
+
+```bash
+npm login
+npm test
+npm publish
+```
+
+The unscoped npm package name is configured as `travel-booking-design-studio`. Verify package-name availability immediately before publishing.
 
 ## What this studio rejects
 
@@ -107,6 +199,6 @@ examples/       Worked examples showing the expected level of thinking
 - fabricated prices, availability, ratings, or policies
 - visual novelty that damages clarity or trust
 
-## What good output looks like
+## License
 
-A strong result has a recognizable point of view, a coherent spatial system, meaningful motion, emotional pacing, clear booking decisions, accessible interaction, and realistic engineering boundaries.
+MIT
