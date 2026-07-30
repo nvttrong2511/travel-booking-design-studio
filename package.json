@@ -1,0 +1,47 @@
+{
+  "name": "travel-booking-design-studio",
+  "version": "1.0.0",
+  "description": "Install a bold AI travel design studio into Claude Code projects.",
+  "type": "module",
+  "bin": {
+    "travel-booking-design-studio": "bin/travel-booking-design-studio.js",
+    "travel-design-studio": "bin/travel-booking-design-studio.js"
+  },
+  "files": [
+    "bin",
+    ".claude",
+    "CLAUDE.md",
+    "templates",
+    "checklists",
+    "docs",
+    "examples",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check bin/travel-booking-design-studio.js",
+    "prepublishOnly": "npm test && npm run check"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude-code",
+    "ai-agents",
+    "design-system",
+    "travel",
+    "ui-ux",
+    "creative-direction",
+    "cli"
+  ],
+  "author": "nvttrong2511",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nvttrong2511/travel-booking-design-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nvttrong2511/travel-booking-design-studio/issues"
+  },
+  "homepage": "https://github.com/nvttrong2511/travel-booking-design-studio#readme"
+}
