@@ -1,107 +1,110 @@
 # Travel Booking Design Studio
 
-An AI-first creative design operating system for building bold, original, production-ready travel booking interfaces with Claude Code.
+A bold, original travel product design agent for Claude Code.
 
-> Invent interfaces. Do not imitate marketplaces.
+> One agent. One install. No marketplace clones.
 
-This repository is both a design knowledge base and an installable CLI. The CLI places agents, commands, rules, templates, and studio instructions into an existing project's `.claude/` directory without replacing user-owned files by default.
+The user sees one agent named `travel-booking-design-studio`. Creative direction, UX strategy, layout invention, interaction design, critique, accessibility, and implementation planning are coordinated internally by that single agent.
 
-## Quick start
+## Install
 
-### 1. Install Claude Code
-
-```bash
-npm install -g @anthropic-ai/claude-code
-claude doctor
-```
-
-### 2. Run the studio installer inside your project
-
-Until the package is published to npm, run it directly from GitHub:
+Run from the root of your project:
 
 ```bash
-cd your-travel-project
 npx github:nvttrong2511/travel-booking-design-studio init
 ```
 
-After npm publication, the shorter command will be:
+After the package is published to npm:
 
 ```bash
 npx travel-booking-design-studio init
 ```
 
-The default `complete` profile installs:
+The installer creates:
 
 ```text
 .claude/
-├── agents/
-├── commands/
-├── rules/
-├── travel-booking-design-studio.md
-└── travel-booking-design-studio/
-    ├── templates/
-    ├── checklists/
-    ├── docs/
-    ├── examples/
-    └── installation.json
+└── agents/
+    ├── travel-booking-design-studio.md
+    └── travel-booking-design-studio/
+        ├── AGENT.md
+        └── installation.json
 ```
 
-It also creates or updates the root `CLAUDE.md` with:
+`travel-booking-design-studio.md` is the Claude Code agent entry point. The adjacent directory contains its internal operating system and supporting knowledge. This keeps one discoverable agent while allowing the agent package to grow without filling `.claude/agents/` with many unrelated agent names.
 
-```md
-<!-- travel-booking-design-studio -->
-@.claude/travel-booking-design-studio.md
-```
+The installer does not modify the project's root `CLAUDE.md`.
 
-Existing project instructions are preserved.
+## Use
 
-### 3. Start Claude Code
+Start Claude Code:
 
 ```bash
 claude
 ```
 
-Then run:
+Then ask naturally:
 
 ```text
-/create-concept
+Use the travel-booking-design-studio agent to redesign the hotel search experience.
+Create three structurally different concepts and do not code until I approve one.
 ```
 
-## CLI commands
+Other examples:
+
+```text
+Use the travel-booking-design-studio agent to critique this booking page.
+```
+
+```text
+Use the travel-booking-design-studio agent in autopilot mode to redesign and implement the destination detail page.
+```
+
+The user does not need to remember slash commands. The agent automatically chooses between discovery, concept generation, design language, reinvention, implementation, review, and autopilot workflows.
+
+## Agent behavior
+
+For substantial interface work, the agent:
+
+1. inspects the product and codebase;
+2. identifies users, decisions, business goals, data, and constraints;
+3. produces at least three structurally different concepts;
+4. attacks generic and derivative ideas;
+5. recommends one direction with explicit trade-offs;
+6. defines the visual and interaction language;
+7. implements only after approval unless autopilot is requested;
+8. finishes with an accessibility, mobile, trust, performance, and originality review.
+
+It rejects Airbnb, Booking, Agoda, Traveloka, Expedia, generic SaaS imitation, hero-search-card formulas, decorative motion, fabricated booking data, and visual novelty that damages clarity.
+
+## CLI
 
 ```bash
-# Full studio
+# Install
 npx github:nvttrong2511/travel-booking-design-studio init
 
-# Smaller installation
-npx github:nvttrong2511/travel-booking-design-studio init --profile minimal
+# Install into another directory
+npx github:nvttrong2511/travel-booking-design-studio init --target ../my-project
 
-# Only specialist agents
-npx github:nvttrong2511/travel-booking-design-studio init --profile agents
-
-# Only slash commands
-npx github:nvttrong2511/travel-booking-design-studio init --profile commands
-
-# Inspect installation
+# Check installation
 npx github:nvttrong2511/travel-booking-design-studio status
 
 # Preview an update
 npx github:nvttrong2511/travel-booking-design-studio update --dry-run
 
-# Update without replacing conflicts
+# Update safely
 npx github:nvttrong2511/travel-booking-design-studio update
 
-# Replace conflicting studio paths intentionally
+# Intentionally replace conflicts
 npx github:nvttrong2511/travel-booking-design-studio update --force
 
-# Remove managed files
+# Remove the agent
 npx github:nvttrong2511/travel-booking-design-studio remove
 ```
 
-Supported options:
+Options:
 
 ```text
---profile <complete|minimal|agents|commands>
 --target <directory>
 --force
 --yes, -y
@@ -109,58 +112,25 @@ Supported options:
 --version, -v
 ```
 
-## Safety behavior
+The CLI skips conflicts by default, records managed files, supports dry runs, and removes only the installed agent paths.
 
-The CLI:
-
-- installs Claude Code assets under `.claude/`;
-- preserves an existing root `CLAUDE.md` and appends one managed import;
-- skips conflicting files by default;
-- records managed paths in `installation.json`;
-- removes only recorded studio files during `remove`;
-- supports `--dry-run` before update or removal;
-- uses only Node.js built-ins and requires Node.js 18 or newer.
-
-## Recommended design workflow
+## Repository structure
 
 ```text
-/create-concept
-/challenge-design
-/generate-design-language
-/reinvent-layout
-/implement-concept
-/design-review
+.claude/agents/
+  travel-booking-design-studio.md       Claude Code entry point
+  travel-booking-design-studio/
+    AGENT.md                             Internal orchestration and rules
+
+bin/                                    npm/npx installer
+test/                                   CLI tests
+docs/                                   Source knowledge and playbooks
+templates/                              Source templates
+checklists/                             Source quality gates
+examples/                               Worked examples
 ```
 
-Do not begin by asking Claude to code the page immediately. Start with a brief and multiple structurally different concepts, critique them, lock the design language, and only then implement the selected direction.
-
-## Core creative rules
-
-Every substantial design task must:
-
-1. generate at least three structurally different concepts;
-2. define a visual and interaction language before assembling components;
-3. reject generic travel marketplace and SaaS patterns;
-4. preserve usability, accessibility, trust, responsive behavior, and implementation feasibility;
-5. finish with a critical design review.
-
-## Repository map
-
-```text
-.claude/
-  agents/       Specialist creative agents
-  commands/     Reusable design workflows
-  rules/        Non-negotiable studio rules
-
-bin/             npm/npx CLI
-test/            CLI behavior tests
-scripts/         Legacy shell installer
-
-docs/            Principles, playbooks, patterns, references
-templates/       Structured briefs and output templates
-checklists/      Quality gates
-examples/        Worked creative examples
-```
+The older specialist agent files remain source material during the transition, but the v2 installer exposes only the single `travel-booking-design-studio` agent to consuming projects.
 
 ## Development
 
@@ -169,35 +139,15 @@ git clone https://github.com/nvttrong2511/travel-booking-design-studio.git
 cd travel-booking-design-studio
 npm test
 npm run check
-node bin/travel-booking-design-studio.js init --target /path/to/test-project --dry-run
+node bin/travel-booking-design-studio.js init --target /tmp/test-project --dry-run
 ```
 
-To test the package exactly as users receive it:
+Test the packaged result:
 
 ```bash
 npm pack
-npx ./travel-booking-design-studio-1.0.0.tgz init --target /path/to/test-project
+npx ./travel-booking-design-studio-2.0.0.tgz init --target /tmp/test-project
 ```
-
-## Publishing to npm
-
-```bash
-npm login
-npm test
-npm publish
-```
-
-The unscoped npm package name is configured as `travel-booking-design-studio`. Verify package-name availability immediately before publishing.
-
-## What this studio rejects
-
-- Airbnb, Booking, Agoda, Traveloka, Expedia, or generic SaaS imitation
-- safe hero-search-card page formulas
-- concepts that only change color, radius, font, or imagery
-- decorative motion without purpose
-- desktop layouts merely stacked on mobile
-- fabricated prices, availability, ratings, or policies
-- visual novelty that damages clarity or trust
 
 ## License
 
