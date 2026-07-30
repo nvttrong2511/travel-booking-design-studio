@@ -1,7 +1,7 @@
 {
   "name": "travel-booking-design-studio",
-  "version": "1.0.0",
-  "description": "Install a bold AI travel design studio into Claude Code projects.",
+  "version": "2.0.0",
+  "description": "Install one bold travel booking design agent into Claude Code projects.",
   "type": "module",
   "bin": {
     "travel-booking-design-studio": "bin/travel-booking-design-studio.js",
@@ -9,12 +9,8 @@
   },
   "files": [
     "bin",
-    ".claude",
-    "CLAUDE.md",
-    "templates",
-    "checklists",
-    "docs",
-    "examples",
+    ".claude/agents/travel-booking-design-studio.md",
+    ".claude/agents/travel-booking-design-studio",
     "LICENSE"
   ],
   "scripts": {
@@ -27,11 +23,11 @@
   },
   "keywords": [
     "claude-code",
-    "ai-agents",
-    "design-system",
+    "ai-agent",
     "travel",
     "ui-ux",
     "creative-direction",
+    "design-agent",
     "cli"
   ],
   "author": "nvttrong2511",
